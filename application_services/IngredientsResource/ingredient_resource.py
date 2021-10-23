@@ -13,7 +13,7 @@ class IngredientResource(BaseRDBApplicationResource):
 
     @classmethod
     def get_data_resource_info(cls):
-        return 'cocktails', 'recipes'
+        return 'cocktails', 'ingredients'
 
     @classmethod
     def get_by_ingredient_id(cls, ingredient_id):
