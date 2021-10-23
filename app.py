@@ -68,49 +68,6 @@ def hello_world():
     return '<u>Hello World!</u>'
 
 
-@app.route('/gabrielle')
-def hello_gabrielle():
-    return '<u>Yay! Gabrielle is here!!!!!!!</u>'
-
-
-@app.route('/imdb/artists/<prefix>')
-def get_artists_by_prefix(prefix):
-    res = IMDBArtistResource.get_by_name_prefix(prefix)
-    rsp = Response(json.dumps(res), status=200, content_type="application/json")
-    return rsp
-
-
-@app.route('/users', methods=['GET', 'POST'])
-def user_collection():
-    """
-    1. HTTP GET return all users.
-    2. HTTP POST with body --> create a user, i.e --> database.
-    :return:
-    """
-    res = UserResource.get_by_template(None)
-    rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
-    return rsp
-
-
-@app.route('/users/<user_id>', methods=['GET', 'PUT', 'DELETE'])
-def specific_user(user_id):
-    """
-    1. Get a specific one by ID.
-    2. Update body and update.
-    3. Delete would ID and delete it.
-    :param user_id:
-    :return:
-    """
-    pass
-
-
-@app.route('/<db_schema>/<table_name>/<column_name>/<prefix>')
-def get_by_prefix(db_schema, table_name, column_name, prefix):
-    res = RDBService.get_by_prefix(db_schema, table_name, column_name, prefix)
-    rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
-    return rsp
-
-
 @app.route('/ingredients', methods=['GET'])
 def ingredient_collection():
     if request.method == 'GET':

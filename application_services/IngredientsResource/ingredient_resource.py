@@ -17,10 +17,9 @@ class IngredientResource(BaseRDBApplicationResource):
 
     @classmethod
     def get_by_ingredient_id(cls, ingredient_id):
-        sql = "SELECT ingredient_name, inventory_name, brand, quantity, price, stock" \
-              "FROM cocktails.ingredients, cocktails.inventories" \
-              "WHERE cocktails.ingredients.ingredient_id = " + ingredient_id + \
-              "cocktails.ingredients.ingredient_id = ocktails.inventories.ingredient.id"
+        sql = "SELECT * " \
+              "FROM cocktails.ingredients " \
+              "WHERE cocktails.ingredients.ingredient_id = " + ingredient_id + ";"
 
         res = RDBService.run_sql(sql, None, True)
         return res
