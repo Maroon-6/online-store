@@ -6,10 +6,7 @@ from datetime import datetime
 
 import utils.rest_utils as rest_utils
 
-from application_services.imdb_artists_resource import IMDBArtistResource
-from application_services.UsersResource.user_service import UserResource
-from database_services.RDBService import RDBService as RDBService
-from application_services.IngredientsResource.ingredient_resource import IngredientResource
+from application_services.OrdersResource.order_resource import OrderResource
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
@@ -68,17 +65,17 @@ def hello_world():
     return '<u>Hello World!</u>'
 
 
-@app.route('/ingredients', methods=['GET'])
-def ingredient_collection():
+@app.route('/orders', methods=['GET'])
+def order_collection():
     if request.method == 'GET':
-        res = IngredientResource.get_by_template(None)
+        res = OrderResource.get_by_template(None)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
 
 
-@app.route('/ingredients/<ingredient_id>', methods=["GET"])
-def specific_ingredient(ingredient_id):
-    res = IngredientResource.get_by_ingredient_id(ingredient_id)
+@app.route('/orders/<order_id>', methods=["GET"])
+def specific_order(order_id):
+    res = OrderResource.get_by_order_id(order_id)
     rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
     return rsp
 
