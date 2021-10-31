@@ -12,8 +12,8 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-app = Flask(__name__)
-CORS(app)
+application = Flask(__name__)
+CORS(application)
 
 
 ##################################################################################################################
@@ -21,7 +21,7 @@ CORS(app)
 # DFF TODO A real service would have more robust health check methods.
 # This path simply echoes to check that the app is working.
 # The path is /health and the only method is GETs
-@app.route("/health", methods=["GET"])
+@application.route("/health", methods=["GET"])
 def health_check():
     rsp_data = {"status": "healthy", "time": str(datetime.now())}
     rsp_str = json.dumps(rsp_data)
@@ -33,8 +33,8 @@ def health_check():
 # The method take any REST request, and produces a response indicating what
 # the parameters, headers, etc. are. This is simply for education purposes.
 #
-@app.route("/api/demo/<parameter1>", methods=["GET", "POST", "PUT", "DELETE"])
-@app.route("/api/demo/", methods=["GET", "POST", "PUT", "DELETE"])
+@application.route("/api/demo/<parameter1>", methods=["GET", "POST", "PUT", "DELETE"])
+@application.route("/api/demo/", methods=["GET", "POST", "PUT", "DELETE"])
 def demo(parameter1=None):
     """
     Returns a JSON object containing a description of the received request.
@@ -60,12 +60,12 @@ def demo(parameter1=None):
     return rsp
 
 
-@app.route('/')
+@application.route('/')
 def hello_world():
     return '<u>Hello World!</u>'
 
 
-@app.route('/orders', methods=['GET'])
+@application.route('/orders', methods=['GET'])
 def order_collection():
     if request.method == 'GET':
         res = OrderResource.get_by_template(None)
@@ -73,7 +73,7 @@ def order_collection():
         return rsp
 
 
-@app.route('/orders/<order_id>', methods=["GET"])
+@application.route('/orders/<order_id>', methods=["GET"])
 def specific_order(order_id):
     res = OrderResource.get_by_order_id(order_id)
     rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
@@ -81,4 +81,4 @@ def specific_order(order_id):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    application.run(host="0.0.0.0", port=5000)
