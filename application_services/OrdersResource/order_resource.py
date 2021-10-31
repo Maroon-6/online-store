@@ -37,7 +37,7 @@ class OrderResource(BaseRDBApplicationResource):
         for i in range(len(sql_res)):
             tmp = OrderedDict()
             tmp["inventory_id"] = sql_res[i]["inventory_id"]
-            tmp["amount"] = sql_res[i]["inventory_id"]
+            tmp["amount"] = sql_res[i]["amount"]
             tmp["price"] = sql_res[i]["price"]
             res["inventories"].append(tmp)
 
