@@ -26,8 +26,6 @@ class OrderResource(BaseRDBApplicationResource):
 
         if not sql_res:
             return None
-        elif len(sql_res) == 1:
-            return sql_res[0]
 
         res = OrderedDict()
         res["order_id"] = sql_res[0]["order_id"]
