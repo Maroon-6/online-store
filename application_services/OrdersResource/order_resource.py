@@ -42,3 +42,30 @@ class OrderResource(BaseRDBApplicationResource):
             res["inventories"].append(tmp)
 
         return res
+
+    @classmethod
+    def place_order(cls, data):
+        if not data:
+            return False
+
+        sql = "SELECT COUNT(order_id) as order_count FROM online_store.orders"
+        sql_res = RDBService.run_sql(sql, None, True)
+        order_id = sql_res[0]["order_count"] + 1
+
+        order_info = dict()
+        order_info["order_id"] = order_id
+        order_info["user_id"] = data["user_id"]
+        order_info["address_id"] = data["address_id"]
+        order_info["total_price"] = data["total_price"]
+
+        RDBService.create("online_store", "orders", order_info)
+
+        for inventory in data["inventories"]:
+            order_detail = dict()
+            order_detail["order_id"] = order_id
+            order_detail["inventory_id"] = inventory["inventory_id"]
+            order_detail["amount"] = inventory["amount"]
+            order_detail["price"] = inventory["price"]
+            RDBService.create("online_store", "order_details", order_detail)
+
+        return True
