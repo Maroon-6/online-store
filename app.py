@@ -2,8 +2,8 @@ from flask import Flask, Response, request
 from flask_cors import CORS
 import json
 import logging
-import boto3
 from datetime import datetime
+from middleware import notification
 
 import utils.rest_utils as rest_utils
 
@@ -76,12 +76,11 @@ def order_collection():
         data = request.json
         res = OrderResource.place_order(data)
         if res:
-            now = datetime.now()
-            msg = "A new order has been placed on " + now.strftime("%m/%d/%Y, %H:%M:%S") + "!"
-            send_sns_msg(msg)
+            msg = "Successfully placed the order!"
+            rsp = Response(json.dumps(msg, default=str), status=201, content_type="application/json")
         else:
             msg = "Failed to place the order!"
-        rsp = Response(json.dumps(msg, default=str), status=200, content_type="application/json")
+            rsp = Response(json.dumps(msg, default=str), status=200, content_type="application/json")
         return rsp
 
 
@@ -92,10 +91,11 @@ def specific_order(order_id):
     return rsp
 
 
-def send_sns_msg(msg):
-    client = boto3.client('sns', region_name="us-east-1")
-    client.publish(TopicArn="arn:aws:sns:us-east-1:493194649607:place_order_notification",
-                   Message=json.dumps(msg))
+@app.after_request
+def after_request_func(response):
+    if response.status_code == 201:
+        notification.require_sns(request)
+    return response
 
 
 if __name__ == '__main__':
