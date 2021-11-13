@@ -1,9 +1,12 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, request, redirect, url_for
 from flask_cors import CORS
+from flask_dance.contrib.google import make_google_blueprint, google
 import json
 import logging
 from datetime import datetime
 from middleware import notification
+from middleware import security
+import os
 
 import utils.rest_utils as rest_utils
 
@@ -15,6 +18,37 @@ logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
 CORS(app)
+
+null = None
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+app.secret_key = "some secret"
+
+blueprint = make_google_blueprint(
+    client_id='1027342541063-p5o91gkgoot1q6466c3tesm3gtlpce0j.apps.googleusercontent.com',
+    client_secret='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',
+    reprompt_consent=True,
+    scope=["profile", "email"]
+)
+
+app.register_blueprint(blueprint, url_prefix="/login")
+
+g_bp = app.blueprints.get("google")
+
+
+@app.before_request
+def before_request_func():
+    result_ok = security.check_security(request, google, g_bp)
+    if not result_ok:
+        return redirect(url_for("google_login"))
+
+
+@app.after_request
+def after_request_func(response):
+    if response.status_code == 201:
+        notification.require_sns(request)
+    return response
 
 
 ##################################################################################################################
@@ -89,13 +123,6 @@ def specific_order(order_id):
     res = OrderResource.get_by_order_id(order_id)
     rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
     return rsp
-
-
-@app.after_request
-def after_request_func(response):
-    if response.status_code == 201:
-        notification.require_sns(request)
-    return response
 
 
 if __name__ == '__main__':
