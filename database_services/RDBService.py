@@ -17,17 +17,22 @@ class RDBService:
     @classmethod
     def _get_db_connection(cls):
 
-        db_connect_info = context.get_db_info()
+        try:
+            db_connect_info = context.get_db_info()
 
-        logger.info("RDBService._get_db_connection:")
-        logger.info("\t HOST = " + db_connect_info['host'])
+            logger.info("RDBService._get_db_connection:")
+            logger.info("\t HOST = " + db_connect_info['host'])
 
-        db_info = context.get_db_info()
+            db_info = context.get_db_info()
 
-        db_connection = pymysql.connect(
-           **db_info,
-            autocommit=True
-        )
+            db_connection = pymysql.connect(
+               **db_info,
+                autocommit=True
+            )
+        except Exception as e:
+            print("e = ", e)
+            db_connection = None
+
         return db_connection
 
     @classmethod

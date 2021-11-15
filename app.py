@@ -41,7 +41,7 @@ g_bp = app.blueprints.get("google")
 def before_request_func():
     result_ok = security.check_security(request, google, g_bp)
     if not result_ok:
-        return redirect(url_for("google_login"))
+        return redirect(url_for("google.login"))
 
 
 @app.after_request
@@ -100,6 +100,18 @@ def hello_world():
     return '<u>Hello World!</u>'
 
 
+@app.route('/login')
+def login():
+    google_data = None
+    user_info_endpoint = 'oauth2/v2/userinfo'
+    if google.authorized:
+        google_data = google.get(user_info_endpoint).json()
+        print(google_data)
+        return "You are {email} on Google".format(email=google_data["email"])
+    else:
+        return redirect(url_for("google.login"))
+
+
 @app.route('/orders', methods=['GET', 'POST'])
 def order_collection():
     if request.method == 'GET':
@@ -126,4 +138,4 @@ def specific_order(order_id):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="127.0.0.1", port=5000)

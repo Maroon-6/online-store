@@ -10,9 +10,9 @@ def check_security(request, google, blueprint):
     if path in secure_paths:
         google_data = None
 
-        order_info_endpoint = '/oauth2/v2/orders'
+        order_info_endpoint = '/oauth2/v2/userinfo'
 
-        if google.authorized:
+        if not google.authorized:
             google_data = google.get(order_info_endpoint).json()
 
             print(json.dumps(google_data, indent=2))
@@ -25,4 +25,7 @@ def check_security(request, google, blueprint):
             result_ok = True
         else:
             result_ok = True
-        return result_ok
+    else:
+        result_ok = True
+
+    return result_ok
