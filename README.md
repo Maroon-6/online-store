@@ -1,6 +1,7 @@
 # online-store
 #### API Paths
 > /orders (GET, POST)
+>
 > /orders/<order_id> (GET)
 
 #### Database
@@ -23,5 +24,6 @@
                 "amount": 2,
                 "price": 29.99
             }
-        ]
+        ],
+        "status": "PENDING"
     }

@@ -18,7 +18,7 @@ class OrderResource(BaseRDBApplicationResource):
 
     @classmethod
     def get_by_order_id(cls, order_id):
-        sql = "SELECT a.order_id, user_id, address_id, total_price, inventory_id, amount, price FROM " \
+        sql = "SELECT a.order_id, user_id, address_id, total_price, inventory_id, amount, price, status FROM " \
               "(SELECT * FROM online_store.orders where order_id = " + order_id + ") AS a " \
               "JOIN online_store.order_details ON a.order_id = order_details.order_id;"
 
@@ -32,6 +32,7 @@ class OrderResource(BaseRDBApplicationResource):
         res["user_id"] = sql_res[0]["user_id"]
         res["address_id"] = sql_res[0]["address_id"]
         res["total_price"] = sql_res[0]["total_price"]
+        res["status"] = sql_res[0]["status"]
         res["inventories"] = []
 
         for i in range(len(sql_res)):
@@ -57,6 +58,7 @@ class OrderResource(BaseRDBApplicationResource):
         order_info["user_id"] = data["user_id"]
         order_info["address_id"] = data["address_id"]
         order_info["total_price"] = data["total_price"]
+        order_info["status"] = data["status"]
 
         RDBService.create("online_store", "orders", order_info)
 

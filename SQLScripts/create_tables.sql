@@ -7,6 +7,7 @@ CREATE TABLE `online_store`.`orders` (
   `user_id` INT NULL,
   `address_id` INT NULL,
   `total_price` FLOAT NULL,
+  `status` ENUM("PENDING", "COMPLETE", "CANCELLED") NULL,
   PRIMARY KEY (`order_id`));
 
 CREATE TABLE `online_store`.`order_details` (
