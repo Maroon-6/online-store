@@ -137,5 +137,12 @@ def specific_order(order_id):
     return rsp
 
 
+@app.route('/orders/users/<user_id>', methods=['GET'])
+def all_order_id_by_specific_user(user_id):
+    res = OrderResource.get_all_order_id_by_user_id(user_id)
+    rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+    return rsp
+
+
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=5000)
