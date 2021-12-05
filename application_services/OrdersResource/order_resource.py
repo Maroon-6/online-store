@@ -20,7 +20,7 @@ class OrderResource(BaseRDBApplicationResource):
     def get_by_order_id(cls, order_id):
         sql = "SELECT a.order_id, user_id, address_id, total_price, inventory_id, amount, price, status FROM " \
               "(SELECT * FROM online_store.orders where order_id = " + order_id + ") AS a " \
-              "JOIN online_store.order_details ON a.order_id = order_details.order_id;"
+                                                                                  "JOIN online_store.order_details ON a.order_id = order_details.order_id;"
 
         sql_res = RDBService.run_sql(sql, None, True)
 
@@ -71,3 +71,13 @@ class OrderResource(BaseRDBApplicationResource):
             RDBService.create("online_store", "order_details", order_detail)
 
         return True
+
+    @classmethod
+    def get_all_order_id_by_user_id(cls, user_id):
+        sql = "SELECT order_id FROM online_store.orders WHERE user_id = " + user_id
+        sql_res = RDBService.run_sql(sql, None, True)
+
+        if not sql_res:
+            return None
+
+        return sql_res
