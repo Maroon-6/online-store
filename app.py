@@ -64,37 +64,6 @@ def health_check():
     return rsp
 
 
-# TODO Remove later. Solely for explanatory purposes.
-# The method take any REST request, and produces a response indicating what
-# the parameters, headers, etc. are. This is simply for education purposes.
-#
-@app.route("/api/demo/<parameter1>", methods=["GET", "POST", "PUT", "DELETE"])
-@app.route("/api/demo/", methods=["GET", "POST", "PUT", "DELETE"])
-def demo(parameter1=None):
-    """
-    Returns a JSON object containing a description of the received request.
-
-    :param parameter1: The first path parameter.
-    :return: JSON document containing information about the request.
-    """
-
-    # DFF TODO -- We should wrap with an exception pattern.
-    #
-
-    # Mostly for isolation. The rest of the method is isolated from the specifics of Flask.
-    inputs = rest_utils.RESTContext(request, {"parameter1": parameter1})
-
-    # DFF TODO -- We should replace with logging.
-    r_json = inputs.to_json()
-    msg = {
-        "/demo received the following inputs": inputs.to_json()
-    }
-    print("/api/demo/<parameter> received/returned:\n", msg)
-
-    rsp = Response(json.dumps(msg), status=200, content_type="application/json")
-    return rsp
-
-
 @app.route('/')
 def hello_world():
     return '<u>Hello World!</u>'
@@ -145,4 +114,4 @@ def all_order_id_by_specific_user(user_id):
 
 
 if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5000)
+    app.run(host="0.0.0.0", port=5000)

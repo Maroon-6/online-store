@@ -4,7 +4,7 @@
 >
 > /orders/<order_id> (GET)
 > 
-> /orders/user/<user_id> (GET)
+> /orders/users/<user_id> (GET)
 
 #### Database
 > database design for online orders
@@ -29,3 +29,9 @@
         ],
         "status": "PENDING"
     }
+
+#### Deployment on Elastic Beanstalk
+In the base directory, do
+>
+    zip -r -X online-store.zip *
+Then, upload the zip file onto the Elastic Beanstalk environment. 
