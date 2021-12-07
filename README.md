@@ -3,6 +3,8 @@
 > /orders (GET, POST)
 >
 > /orders/<order_id> (GET)
+> 
+> /orders/user/<user_id> (GET)
 
 #### Database
 > database design for online orders
